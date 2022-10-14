@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as yup from 'yup';
 import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, {Fragment, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -23,26 +23,38 @@ const Profile = () => {
   const [email] = useState(localStorage.getItem('email'));
   const [authorizedAccess, setAuthorizedAccess] = useState(false);
 
-  useEffect(async () => {
-    await Axios.get('http://localhost:3001/validateCredentials', {
-      params: { email: localStorage.getItem('email') },
-    })
-      .then((response) => {
-        console.log(response);
-        if (response.data.valid && !response.data.admin)
-          setAuthorizedAccess(true);
-        else if (response.data.valid && response.data.admin)
-          window.location.href = '/Perfil';
-        else {
-          localStorage.removeItem('email');
-          window.location.href = '/login';
-        }
+  const Schedule = () => {
+
+    const [authorizedAccess, setAuthorizedAccess] = useState(false);
+  
+    useEffect(async () => {
+      await Axios.get('http://localhost:3001/validateCredentials', {
+        params: { email: localStorage.getItem('email') },
       })
-      .catch((response) => {
-        //handle error
-        console.log('error:' + response);
-      });
-  }, []);
+        .then((response) => {
+          console.log(response);
+          if (response.data.valid)
+            setAuthorizedAccess(true);
+          else {
+            localStorage.removeItem('email');
+            window.location.href = '/login';
+          }
+        })
+        .catch((response) => {
+          //handle error
+          console.log('error:' + response);
+        });
+    }, []);
+    return authorizedAccess ? (
+
+      <Fragment>
+  
+        
+      </Fragment>
+    ) : (
+      <>proximos capitulos</>
+    );
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -76,7 +88,7 @@ const Profile = () => {
       .required('A confirmação da senha é obrigatória'),
   });
 
-  return authorizedAccess ? (
+  return (
     <ThemeProvider theme={theme}>
        <div style={{
             backgroundImage: "url(/xa.jpg)",
@@ -108,7 +120,7 @@ const Profile = () => {
           }}
         >
         <Icon sx={{ backgroundImage: "url(/profile.png)", backgroundSize: 'cover', width: '70px', height: '70px', m: 1}} />
-          
+          <Schedule/>
           <Typography component="h1" variant="h5" align= 'left' >
             Perfil de usuário
           </Typography>
@@ -161,9 +173,7 @@ const Profile = () => {
       </div>
       </div>
     </ThemeProvider>
-  ) : (
-    <>retornando...</>
-  );
+  ) 
 };
 
 export default Profile;

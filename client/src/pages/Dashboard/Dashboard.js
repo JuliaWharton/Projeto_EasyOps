@@ -89,7 +89,7 @@ const Dashboard = () => {
           >
             Dashboard: aluno
           </Typography>
-          <Button variant="outlined" color="primary" onClick={logout}>
+          <Button variant="contained" color="secondary" onClick={logout}>
             Sair
           </Button>
         </Toolbar>
@@ -117,12 +117,11 @@ const Dashboard = () => {
             }}>
         <Toolbar />
 <Schedule />
-            <Button
+  <Button
               type="submit"
               variant="contained"
               sx={{ ml: 25, mb: 2 }}
               href='/Perfil'
-
             >
               Mudar Senha
             </Button>

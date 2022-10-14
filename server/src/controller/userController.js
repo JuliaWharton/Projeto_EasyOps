@@ -29,12 +29,13 @@ module.exports = {
             data: { message: email },
             statusText: 'sucesso',
           });
-        } else
+        } else{
           res.send({
             status: 401,
             data: { message: email },
             statusText: 'Senha Incorreta',
           });
+        }
       });
     }
   }

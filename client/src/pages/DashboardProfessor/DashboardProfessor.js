@@ -89,7 +89,7 @@ const DashboardProfessor = () => {
           >
             Dashboard: Professor
           </Typography>
-          <Button variant="outlined" color="primary" onClick={logout}>
+          <Button variant="contained" color="secondary" onClick={logout}>
             Sair
           </Button>
         </Toolbar>
