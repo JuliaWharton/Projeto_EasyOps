@@ -22,4 +22,5 @@ const User = db.sequelize.define('questoes', {
     timestamps: false,
     freezeTableName: true,
 });
+await User.sync({ alter: true })
 module.exports = User;

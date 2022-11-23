@@ -22,4 +22,5 @@ const User = db.sequelize.define('turma', {
     timestamps: false,
     freezeTableName: true,
 });
+await User.sync({ alter: true })
 module.exports = User;

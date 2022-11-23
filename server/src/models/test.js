@@ -31,4 +31,5 @@ const User = db.sequelize.define('prova', {
     timestamps: false,
     freezeTableName: true,
 });
+await User.sync({ alter: true })
 module.exports = User;
