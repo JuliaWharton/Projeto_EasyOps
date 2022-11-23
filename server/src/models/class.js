@@ -2,27 +2,21 @@ const db = require('../database/db');
 const {DataTypes} = require('sequelize');
 const Sequelize = require('sequelize')
 
-const User = db.sequelize.define('usuarios', {
+const User = db.sequelize.define('turma', {
     id: {
         type: db.Sequelize.INTEGER,
-        primaryKey: true, 
+        primaryKey: true,
         autoIncrement: true
     },
-    email: {
-        type: db.Sequelize.STRING
+    nome: {
+        type: db.Sequelize.STRING, 
     },
-    nusp: {
-        type: db.Sequelize.STRING
+    fkProfessorResponsavel: {
+        type: db.Sequelize.INTEGER 
     },
-    senha: {
+    descricao: {
         type: db.Sequelize.STRING
-    },
-   cpf: {
-        type: db.Sequelize.STRING
-    },
-    tipo: {
-        type: db.Sequelize.INTEGER
-    }
+    }, 
 }
 , {
     timestamps: false,
