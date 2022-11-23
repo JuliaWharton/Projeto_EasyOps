@@ -12,7 +12,7 @@ const User = db.sequelize.define('turma', {
         type: db.Sequelize.STRING, 
     },
     fkProfessorResponsavel: {
-        type: db.Sequelize.int 
+        type: db.Sequelize.INTEGER 
     },
     descricao: {
         type: db.Sequelize.STRING
@@ -22,5 +22,5 @@ const User = db.sequelize.define('turma', {
     timestamps: false,
     freezeTableName: true,
 });
-await User.sync({ alter: true })
+ User.sync({ alter: true })
 module.exports = User;

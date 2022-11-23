@@ -19,5 +19,5 @@ const User = db.sequelize.define('turma_alunos', {
     timestamps: false,
     freezeTableName: true,
 });
-await User.sync({ alter: true })
+User.sync({ alter: true })
 module.exports = User;
