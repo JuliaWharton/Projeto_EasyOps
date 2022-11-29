@@ -1,7 +1,12 @@
 const express = require('express');
 
 const routes = express.Router();
-const userController = require('./controller/userController');
+
+const controllers = {
+    'class': require('./controller/classController'),
+    'test': require('./controller/testController'),
+    'user': require('./controller/userController'),
+}
 
 
 
@@ -12,9 +17,21 @@ routes.get('/', (req, res) => {
 })
 
 
-routes.post('/login', userController.login);
-routes.post('/Profile', userController.mudaSenha);
-routes.get('/validateCredentials', userController.validateCredentials);
+routes.all('/*', async (req, res) => {
+    console.log(req.url)
+    regex = new RegExp("[/]|[?]")
+    splittedUrl = req.url.split(regex);
+    func = controllers[splittedUrl[1]][splittedUrl[2]];
+    if(func){
+        resp = await func(req, res)
+       //if (resp.status) res.status(resp.status)
+        //res.json({message: resp})
+    }else{
+        return res.json({
+            message: 'Hello World :)' 
+        });
+    }
+});
 
 
 

@@ -11,9 +11,14 @@ module.exports = {
         const desc = req.body.desc 
         const user = await User.findOne({ where: { email: email } });
         const turma = await Class.create({nome: nome, fkProfessorResponsavel: user.dataValues.id, descricao: desc})
+        if(turma)
         res.send({
             statusText: "Suceso",
-            data: turma
+            data: turma.dataValues.nome
+        })
+        res.send({
+            statusText: "Failed",
+            status: 500
         })
         } catch (error) {
             res.send({
@@ -118,7 +123,7 @@ module.exports = {
             })
             res.send({
                 statusText: 'Sucesso', 
-                data: classes
+                data: classes.dataValues
             }
 
             )

@@ -8,10 +8,10 @@ const User = db.sequelize.define('questoes', {
         primaryKey: true,
         autoIncrement: true
     },
-    tipo: {
+    closedQuestion: {
         type: db.Sequelize.INTEGER, 
     },
-    fkProfessorResponsavel: {
+    fkTestId: {
         type: db.Sequelize.INTEGER 
     },
     enunciado: {
