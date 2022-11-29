@@ -65,7 +65,7 @@ const Schedule = () => {
       
     </Fragment>
   ) : (
-    <>proximos capitulos</>
+    <></>
   );
 };
 
@@ -129,13 +129,25 @@ const DashboardProfessor = () => {
               variant="contained"
               sx={{ ml: 30, mb: 2 }}
             >
-              Historico de provas
+              Resultados das turmas
             </Button>
             <Button
               variant="contained"
               sx={{ ml: 30, mb: 2 }}
             >
               Nova avaliação
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ ml: 30, mb: 2 }}
+            >
+             Corrigir questões dissertativas
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ ml: 30, mb: 2 }}
+            >
+             Adicionar Questões
             </Button>
          </div>
     </div>

@@ -1,19 +1,18 @@
-import {React, useState, useEffect} from 'react'
-import axios from 'axios'
+import {React, useState, useEffect} from 'react';
+import axios from 'axios';
 import {
     AppBar,
     Box,
     Button,
     Toolbar,
     Typography,
-    TextField,Container,
-    Grid,Paper,
+    TextField,
     MenuItem,
     Card
   } from '@mui/material';
   import LocalizationProvider from '@mui/lab/LocalizationProvider';
   import AdapterDateFns from '@mui/lab/AdapterDateFns';
-  import DatePicker from '@mui/lab/DatePicker';
+  import DateTimePicker from '@mui/lab/DateTimePicker';
   import ptBRLocale from 'date-fns/locale/pt-BR';
 
 
@@ -21,11 +20,42 @@ import {
 const CadastroProvaForm = () => {
 
   const [state, setState] = useState({
-    data: '',
+    dataInicio: '',
+    dataFim: '',
     questoes: [],
-    questoesSelecionadas: []
+    // questoes: [ {
+    //   descricao:
+    //     'A retomada da Antiguidade clássica pela perspectiva do patrimônio cultural foi realizada com o objetivo de:',
+    //   tipoQuestao: 'objetiva',
+    //   alternativaA: 'afirmar o ideário cristão para reconquistar a grandeza perdida.',
+    //   alternativaB:  'utilizar os vestígios restaurados para justificar o regime político.',
+    //   alternativaC: 'difundir os saberes ancestrais para moralizar os costumes sociais.',
+    //   alternativaD: 'refazer o urbanismo clássico para favorecer a participação política.',
+    //   alternativaE: 'recompor a organização republicana para fortalecer a administração estatal.',
+    //   },
+    
+    // {
+    //   descricao:
+    //     'A retomada da Antiguidade clássica pela perspectiva do patrimônio cultural foi realizada com o objetivo de:',
+    //   tipoQuestao: 'objetiva',
+     
+    //     alternativaA:'afirmar o ideário cristão para reconquistar a grandeza perdida.',
+    //     alternativaB:'utilizar os vestígios restaurados para justificar o regime político.',
+    //     alternativaC:'difundir os saberes ancestrais para moralizar os costumes sociais.',
+    //   alternativaD: 'refazer o urbanismo clássico para favorecer a participação política.',
+    //   alternativaE: 'recompor a organização republicana para fortalecer a administração estatal.',
+    
+    // },
+    // {
+    //   descricao:
+    //     '“A Técnica de PCR tem inúmeras aplicações. Na clínica, por exemplo, é utilizado no diagnóstico de doenças infecciosas e na detecção de eventos patológicos raros. Na criminalística, um único fio de cabelo pode identificar o doador.” (O que é PCR? in www.madasa.com.br. Acesso em 17/outubro/2007). Esclareça por que a técnica de PCR (reação em cadeia da polimerase) e a técnica de hibridização, conjugadas, podem ser um método eficaz em medicina preventiva nos casos de detecção de anomalias genéticas.',
+    // tipoQuestao: 'discursiva'
+    //   },],
+    questoesSelecionadas: [],
+    turmasSelecionadas: []
   });
- 
+  
+  const [turmas, setTurmas] = useState([]);
 
   const setInputValue = (property, val) => {
     setState({
@@ -42,15 +72,19 @@ const CadastroProvaForm = () => {
     }
   }
 
-
-  const  buscarQuestoes = async() => {
-    axios.get('https://.herokuapp.com/questao/findallativa')
-      .then((response) => {
-        this.setInputValue('listaQuestoes', response.data)
-        console.log(response.data)
-      })
-
+  const setValor = (e) => {
+    const { name, value } = e.target;
+    setInputValue(name, value);
   }
+
+  // const  buscarQuestoes = async() => {
+  //   axios.get('https://.herokuapp.com/questao/findallativa')
+  //     .then((response) => {
+  //       this.setInputValue('questoes', response.data)
+  //       console.log(response.data)
+  //     })
+
+  // }
     const cadastrar = async() => {
       if (this.state.listaQuestoesAdicionadas.length < 36) {
         alert(`Você não selecionou 36 questões, faltam ${36 - this.state.listaQuestoesAdicionadas.length}`)
@@ -88,19 +122,8 @@ const CadastroProvaForm = () => {
       list.pop(questao)
       this.setInputValue('questoesSelecionadas', list)
     }
-  
-  const voltar = () => {
 
-  return (
-       <div>
-         <br></br>
-         <br></br>
-         <br></br>
-         <br></br>
-       </div>
-     )
-   }
-   const [date, setDate] = useState(new Date());
+
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -144,17 +167,61 @@ const CadastroProvaForm = () => {
                   borderRadius: '10px'
               }}>
 
-     <h4>Data da prova:</h4>
+          <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              sx ={{mt: 5, ml: 4}}
+ 
+            >Detalhes da Prova</Typography>
+
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={ptBRLocale}>
-        <DatePicker
-          label="Data"
+        <DateTimePicker
+          label="Data Inicio"
+          renderInput={(params) => <TextField {...params} sx={{ pb: 2, mr: 2, ml:4}} />}
+          value={state.dataInicio}
+          onChange={setValor}
+        />
+        </LocalizationProvider>
+
+         <LocalizationProvider dateAdapter={AdapterDateFns} locale={ptBRLocale}>
+        <DateTimePicker
+          label="Data Fim"
           renderInput={(params) => <TextField {...params} sx={{ pb: 2 }} />}
-          value={state.date}
-          placeholder="dd/mm/aaaa"
-          onChange={setInputValue}
+          value={state.dataFinal}
+          onChange={setValor}
         />
       </LocalizationProvider>
- 
+      <TextField
+              fullWidth
+              value={state.turmaEscolhida}
+              required
+              onChange={setValor}
+              select 
+              label="Turma(s)"
+              id="turmaEscolhida"
+              multiple
+              sx={{ maxWidth: 300, ml: 5 }}
+            >
+              {turmas.map((t) => (
+                <MenuItem value={t}>{t}
+              </MenuItem>
+              ))}
+            </TextField>
+                
+            <TextField
+              fullWidth
+              value={state.turmaEscolhida}
+              required
+              onChange={setValor}
+              label="Duração (em minutos)"
+              id="turmaEscolhida"
+              sx={{ maxWidth: 300, ml: 5 }}
+            >
+             
+            </TextField>
+
+
           <Typography
               component="h1"
               variant="h6"
@@ -162,12 +229,12 @@ const CadastroProvaForm = () => {
               noWrap
               sx={{ ml: 4}}
             >
-            Escolha as questões e a turma
+            Escolha as questões
             </Typography>
       
         
             {state.questoes.map((questao, index) => {
-          if (questao.tipoQuestao === 1) {
+          if (questao.tipoQuestao === 'discursiva') {
             return <div>
 
          <Button
@@ -182,15 +249,15 @@ const CadastroProvaForm = () => {
         <Card>
           <Card.Header>{`Questão ${index + 1}`}</Card.Header>
           <Card.Body>
-            <Card.Title className=" d-flex justify-content-left">{questao.descricao}</Card.Title>
-            <br></br>
-            <Card.Footer className="text-muted">{questao.estado === 1 ? 'Ativo' : 'Não ativo'}</Card.Footer>
+            <Card.Title>{questao.descricao}</Card.Title>
+            <Card.Footer>{questao.estado === 1 ? 'Ativo' : 'Não ativo'}</Card.Footer>
           </Card.Body>
         </Card>
 
     
             </div>
           } else {
+            return <div></div>
             return <div>
 
               <Button
@@ -224,14 +291,14 @@ const CadastroProvaForm = () => {
         <Button
         sx={{ width:500 , mt: 3, mb: 2, ml: 15, mb: 5}}
         variant="contained"
-        onClick={cadastrar}
+        // onClick={cadastrar}
         >
           Cadastrar
         </Button>
         <Button
         sx={{ width:500, mt:2.5,  ml: 10, mb: 5}}
         variant="contained"
-          onClick={voltar}
+        //  href="/DashboardProfessor"
         >
           Voltar
          </Button>

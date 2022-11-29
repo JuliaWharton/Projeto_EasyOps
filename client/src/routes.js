@@ -10,6 +10,7 @@ import themeDefault from './theme';
 import DashboardProfessor from './pages/DashboardProfessor/DashboardProfessor';
 import CadastroProvaForm from './pages/EditorDeProva/AdicionarProva';
 import RespondeProva from './pages/RespondeProva/RespondeProva';
+import RegisterForm from './pages/AdminPage/AdminPage';
 
 const theme = createTheme(themeDefault);
 
@@ -27,6 +28,7 @@ const Routes = () => {
           />
           <PrivateRoute path="/Perfil" component={Profile} />
           <Route component={LoginPage} path="/login" />
+          <PrivateRoute path="/AdminPage" component={RegisterForm}  />
           <Route component={CadastroProvaForm} path="/CadastroProva" />
           <Route component={Home} path="/" />
         </Switch>
