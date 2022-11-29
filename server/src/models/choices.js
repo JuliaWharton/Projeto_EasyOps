@@ -8,15 +8,21 @@ const User = db.sequelize.define('alternativas', {
         primaryKey: true,
         autoIncrement: true
     },
-    fkProva: {
-        type: db.Sequelize.INTEGER 
-    },
-    texto: {
+    a: {
         type: db.Sequelize.STRING
-    },
-    ehCerta: {
-        type: db.Sequelize.BOOLEAN
-    }
+    }, 
+    b: {
+        type: db.Sequelize.STRING
+    }, 
+    c: {
+        type: db.Sequelize.STRING
+    }, 
+    d: {
+        type: db.Sequelize.STRING
+    }, 
+    e: {
+        type: db.Sequelize.STRING
+    }, 
 }
 , {
     timestamps: false,

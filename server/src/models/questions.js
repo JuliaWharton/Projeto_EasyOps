@@ -9,13 +9,19 @@ const User = db.sequelize.define('questoes', {
         autoIncrement: true
     },
     closedQuestion: {
-        type: db.Sequelize.INTEGER, 
+        type: db.Sequelize.INTEGER
     },
     fkTestId: {
         type: db.Sequelize.INTEGER 
     },
     enunciado: {
         type: db.Sequelize.STRING
+    }, 
+    rightChoice: {
+        type: db.Sequelize.STRING
+    },
+    fkAlternatives: {
+        type: db.Sequelize.INTEGER
     }
 }
 , {

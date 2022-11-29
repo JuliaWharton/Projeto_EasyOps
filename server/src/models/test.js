@@ -11,9 +11,6 @@ const User = db.sequelize.define('prova', {
     nome: {
         type: db.Sequelize.STRING, 
     },
-    fkProfessorResponsavel: {
-        type: db.Sequelize.int 
-    },
     horarioComeco:{
         type: db.Sequelize.DATE
     },
@@ -31,5 +28,5 @@ const User = db.sequelize.define('prova', {
     timestamps: false,
     freezeTableName: true,
 });
-ser.sync({ alter: true })
+User.sync({ alter: true })
 module.exports = User;

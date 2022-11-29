@@ -108,6 +108,7 @@ module.exports = {
         try {
             const email  = req.body.email
             const user = await User.findOne({ where: { email: email } });
+            const resp = [];
             if(!user) res.send()
         } catch (error) {
             res.send({
@@ -121,9 +122,10 @@ module.exports = {
                 data: {message: email}, 
                 statusText: 'professor sem turma cadastrada'
             })
+            for(const c of classes) resp.push(c.dataValues)
             res.send({
                 statusText: 'Sucesso', 
-                data: classes.dataValues
+                data: resp
             }
 
             )
