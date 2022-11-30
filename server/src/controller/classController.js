@@ -22,10 +22,7 @@ module.exports = {
             status: 500
         });
         } catch (error) {
-            res.send({
-                statusText: "Failed",
-                status: 500
-            });
+            console.log(erro)
     }
     }, 
     async addstudent(req, res) {
@@ -55,10 +52,7 @@ module.exports = {
             statusText: 'aluno inserido com sucesso', 
         });
         } catch (error) {
-            res.send({
-                statusText: "Failed",
-                status: 500
-            });
+            console.log(erro)
         }
     },
     async removeUser(req, res) {
@@ -89,10 +83,7 @@ module.exports = {
                 statusText: 'aluno retirado da turma com sucesso', 
             });
             } catch (error) {
-                res.send({
-                    statusText: "Failed",
-                    status: 500
-                });
+                console.log(erro)
             }
     }, 
     async listaAlunos(req,res) {
@@ -110,10 +101,7 @@ module.exports = {
             });
 
         } catch (error) {
-            res.send({
-                statusText: "Failed",
-                status: 500
-            });
+            console.log(erro)
         }
     }, 
     async listaDoProfessor(req, res) {
@@ -146,10 +134,7 @@ module.exports = {
             );
         }
         catch(erro) {
-            res.send({
-                statusText: erro,
-                status: 500
-            });
+            console.log(erro)
         }
     }
 }

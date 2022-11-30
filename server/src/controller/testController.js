@@ -43,10 +43,7 @@ module.exports = {
             statusText: 'sucesso'
         })
         } catch (error) {
-            res.send({
-                statusText: "Failed",
-                status: 500
-            })
+            console.log(erro)
         }
     }, 
     async listTestsForUser(req, res){
@@ -94,10 +91,7 @@ module.exports = {
                 data: resp
             })
         } catch (error) {
-            res.send({
-                statusText: "Failed",
-                status: 500
-            })
+            console.log(erro)
         }
     }, 
     async loadTest(req, res) {
@@ -138,10 +132,7 @@ module.exports = {
         })
     }
     catch (erro) {
-        res.send({
-            statusText: "Failed",
-            status: 500
-        })
+        console.log(erro)
     }
 }, 
 
@@ -167,10 +158,7 @@ module.exports = {
             statusText: 'Sucesso'
           });
         } catch (error) {
-            res.send({
-                statusText: "Failed",
-                status: 500
-            })
+            console.log(erro)
         }
     },
 }
