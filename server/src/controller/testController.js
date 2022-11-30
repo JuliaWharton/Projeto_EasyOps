@@ -43,11 +43,42 @@ module.exports = {
     async listTestsForUser(req, res){
         try {
             const email = req.body.email 
+            resp = []
             const user = await User.findOne({where: {email: email}})
+            if(!user)
+            res.send({
+                statusText: "Failed",
+                status: 500
+            })
             const CSs = await CS.findAll({where: {fkUserId: user.dataValues.id}})
-            
+            if(!CSs)
+            res.send({
+                statusText: "Failed",
+                status: 500
+            })
+            for(const cs of CSs){
+                const classe = await Class.findOne({where: {id: cs.dataValues.fkTurma}})
+                if(!classe) res.send({
+                    statusText: "Failed",
+                    status: 500
+                })
+                const provas = await Test.findAll({where: {fkTurma: classe.dataValues.id}})
+                if(!provas) res.send({
+                    statusText: "Failed",
+                    status: 500
+                })
+                for(const p of provas)
+                    if(p.dataValues.dataComeco < new Date()) resp.push(p.dataValues.nome) 
+            }
+            res.send({
+                statusText: 'Sucesso', 
+                data: resp
+            })
         } catch (error) {
-            
+            res.send({
+                statusText: "Failed",
+                status: 500
+            })
         }
     }
 }

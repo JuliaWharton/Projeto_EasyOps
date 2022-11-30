@@ -109,8 +109,7 @@ module.exports = {
             const email  = req.body.email
             const user = await User.findOne({ where: { email: email } });
             const resp = [];
-            if(!user) res.send()
-        } catch (error) {
+            if(!user)
             res.send({
                 status: 400,
                 data: { message: email },
@@ -127,8 +126,13 @@ module.exports = {
                 statusText: 'Sucesso', 
                 data: resp
             }
-
             )
+        }
+        catch(erro) {
+            res.send({
+                statusText: "Failed",
+                status: 500
+            })
         }
     }
 }
