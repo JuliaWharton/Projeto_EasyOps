@@ -80,15 +80,12 @@ module.exports = {
           valid: false,
         });
       res.send({
-        data: user.dataValues.tipo ,
-        valid: true,
+        data: user.dataValues, 
+        valid: true
       });
     }
     catch (error) {
-      res.send({
-        data: { message: 'usuario não encontrado' },
-        valid: false,
-      });
+      console.log(erro)
     }
   }, 
   async deleteUser (req,res) {
@@ -98,21 +95,19 @@ module.exports = {
       if (!user){
         res.send({
           data: { message: 'usuario não encontrado' },
-          valid: false,
+          valid: false
         });
         return;
         }
       await User.destroy(user)  
       res.send({
         data: { message: 'usuario deletado' },
-        valid: true,
+        valid: true
       });
     }
     catch (error) {
-      res.send({
-        data: { message: 'usuario não encontrado' },
-        valid: false,
-      });
+      console.log(erro)
+      return
     }
   }, 
   async createUser(req, res){
@@ -120,11 +115,18 @@ module.exports = {
       const email = req.query.email 
       const nusp = req.query.nusp 
       const cpf = req.query.cpf 
-      const tipo = req.query.tipo 
+      const tipo = req.query.tipoAdmin
+      const olduser = await User.findOne({where: {email: email }})
+      if(olduser){
+        res.send({
+          data: email,
+          statusText: 'Já existe um usuario com este email'
+        })
+      }
       const user = await User.create({email: email, nusp: nusp, senha: nusp, cpf: cpf, tipo: tipo})
       if(user) res.send({
-        data: user, 
-        valid: true,
+        data: user.dataValues.tipo, 
+        valid: true
       });
       else res.send({
         statusText: "Failed",
@@ -132,10 +134,7 @@ module.exports = {
     })
     }
     catch(erro) {
-      res.send({
-        statusText: "Failed",
-        status: 500
-    })
+      console.log(erro)
     }
   }
 };
