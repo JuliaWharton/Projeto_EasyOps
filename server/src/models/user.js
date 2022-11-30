@@ -21,7 +21,7 @@ const User = db.sequelize.define('usuarios', {
         type: db.Sequelize.STRING
     },
     tipo: {
-        type: db.Sequelize.INTEGER
+        type: db.Sequelize.STRING
     }
 }
 , {

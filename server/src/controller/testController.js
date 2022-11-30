@@ -10,23 +10,23 @@ const Answers = require('../models/answers')
 
 
 module.exports = {
-    async createTest(req, res){
+    async queryTest(req, res){
         try{ 
         const prova = req.body.prova 
-        const test = await Test.create({nome: prova.nome, horarioComeco: prova.comeco, duracao: prova.duracao, descricao: prova.descricao, fkTurma: prova.turma})
+        const test = await Test.query({nome: prova.nome, horarioComeco: prova.comeco, duracao: prova.duracao, descricao: prova.descricao, fkTurma: prova.turma})
         if(!test) 
         res.send({
             statusText: "Failed",
             status: 500
         })
         for(question of prova.questions){
-            const choice = await Choices.create(question.alternatives) 
+            const choice = await Choices.query(question.alternatives) 
             if(!choice)
                 res.send({
                     statusText: "Failed",
                     status: 500
                 })
-            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: question.enunciado, rightChoise: question.rightChoise, fkAlternatives: choice })
+            const question = await Question.query({fkTestId: test.dataValues.id, enunciado: question.enunciado, rightChoise: question.rightChoise, fkAlternatives: choice })
             if(!question)
                 res.send({
                     statusText: "Failed",
@@ -129,7 +129,7 @@ module.exports = {
            const user = await User.findOne({ where: { email: email }});
            for(q of questions){
             const question =await  Question.findOne({where: {id: q.id}})
-            const ans = await Answers.create({fkUser: user.dataValues.id, fkQuestion: q.id, text: q.answer, correct: q.answer === question.dataValues.rightChoise})
+            const ans = await Answers.query({fkUser: user.dataValues.id, fkQuestion: q.id, text: q.answer, correct: q.answer === question.dataValues.rightChoise})
             const alt = await Alternatives.findOne({where: {id: question.dataValues.fkAlternatives}})
             const feedback = {} 
             feedback.enunciado = question.dataValues.enunciado;

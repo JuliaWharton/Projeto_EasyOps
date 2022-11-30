@@ -78,19 +78,16 @@ module.exports = {
         res.send({
           data: { message: 'usuario não encontrado' },
           valid: false,
-          admin: false
         });
       res.send({
-        data: { message: 'usuario encontrado' },
+        data: user.dataValues.tipo ,
         valid: true,
-        tipo: user.dataValues.tipo 
       });
     }
     catch (error) {
       res.send({
         data: { message: 'usuario não encontrado' },
         valid: false,
-        admin: false
       });
     }
   }, 
@@ -114,6 +111,29 @@ module.exports = {
         data: { message: 'usuario não encontrado' },
         valid: false,
       });
+    }
+  }, 
+  async createUser(req, res){
+    try {
+      const email = req.query.email 
+      const nusp = req.query.nusp 
+      const cpf = req.query.cpf 
+      const tipo = req.query.tipo 
+      const user = await User.create({email: email, nusp: nusp, senha: nusp, cpf: cpf, tipo: tipo})
+      if(user) res.send({
+        data: user, 
+        valid: true,
+      });
+      res.send({
+        statusText: "Failed",
+        status: 500
+    })
+    }
+    catch(erro) {
+      res.send({
+        statusText: "Failed",
+        status: 500
+    })
     }
   }
 };

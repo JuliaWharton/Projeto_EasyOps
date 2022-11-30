@@ -2,6 +2,9 @@ module.exports = {
   dialect: 'mysql',
   host: 'localhost',
   username: 'root',
-  password: 'adm123',
+  password: '12345678',
   database: 'gpti',
+  dialectOptions: {
+    socketPath: "/tmp/mysql.sock"
+},
 };
