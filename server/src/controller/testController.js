@@ -58,7 +58,7 @@ module.exports = {
             });
             return
         }
-            const CSs = await CS.findAll({where: {fkUserId: user.dataValues.id}});
+            const CSs = await CS.findAll({where: {fkUser: user.dataValues.id}});
             if(!CSs){
             res.send({
                 statusText: "Failed",
