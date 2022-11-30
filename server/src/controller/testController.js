@@ -10,29 +10,38 @@ const Answers = require('../models/answers')
 
 
 module.exports = {
-    async queryTest(req, res){
+    async createTest(req, res){
         try{ 
-        const prova = req.body.prova 
-        const test = await Test.query({nome: prova.nome, horarioComeco: prova.comeco, duracao: prova.duracao, descricao: prova.descricao, fkTurma: prova.turma})
-        if(!test) 
-        res.send({
-            statusText: "Failed",
-            status: 500
-        })
+        const prova = req.query.prova 
+        const test = await Test.create({nome: prova.nome, horarioComeco: prova.comeco, duracao: prova.duracao, descricao: prova.descricao, fkTurma: prova.turma})
+        if(!test) {
+            res.send({
+                statusText: "Failed",
+                status: 500
+            })
+            return 
+        }
         for(question of prova.questions){
-            const choice = await Choices.query(question.alternatives) 
-            if(!choice)
+            const choice = await Choices.create(question.alternatives) 
+            if(!choice) {
                 res.send({
                     statusText: "Failed",
                     status: 500
                 })
-            const question = await Question.query({fkTestId: test.dataValues.id, enunciado: question.enunciado, rightChoise: question.rightChoise, fkAlternatives: choice })
-            if(!question)
+                return
+            }
+            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: question.enunciado, rightChoise: question.rightChoise, fkAlternatives: choice })
+            if(!question){
                 res.send({
                     statusText: "Failed",
                     status: 500
-                })  
+                });
+                return
+            }
         }
+        res.send({
+            statusText: 'sucesso'
+        })
         } catch (error) {
             res.send({
                 statusText: "Failed",
@@ -42,31 +51,41 @@ module.exports = {
     }, 
     async listTestsForUser(req, res){
         try {
-            const email = req.body.email 
+            const email = req.query.email 
             const resp = []
             const user = await User.findOne({where: {email: email}})
-            if(!user)
+            if(!user){
             res.send({
                 statusText: "Failed",
                 status: 500
-            })
-            const CSs = await CS.findAll({where: {fkUserId: user.dataValues.id}})
-            if(!CSs)
+            });
+            return
+        }
+            const CSs = await CS.findAll({where: {fkUserId: user.dataValues.id}});
+            if(!CSs){
             res.send({
                 statusText: "Failed",
                 status: 500
-            })
+            });
+            return;
+        }
             for(const cs of CSs){
-                const classe = await Class.findOne({where: {id: cs.dataValues.fkTurma}})
-                if(!classe) res.send({
+                const classe = await Class.findOne({where: {id: cs.dataValues.fkTurma}});
+                if(!classe) {
+                    res.send({
                     statusText: "Failed",
                     status: 500
-                })
-                const provas = await Test.findAll({where: {fkTurma: classe.dataValues.id}})
-                if(!provas) res.send({
+                });
+                return;
+            }
+                const provas = await Test.findAll({where: {fkTurma: classe.dataValues.id}});
+                if(!provas) {
+                    res.send({
                     statusText: "Failed",
                     status: 500
-                })
+                });
+                return;
+            }
                 for(const p of provas)
                     if(p.dataValues.dataComeco < new Date()) resp.push(p.dataValues.nome) 
             }
@@ -83,20 +102,25 @@ module.exports = {
     }, 
     async loadTest(req, res) {
         try {
-        const nome = req.body.nome 
+        const nome = req.query.nome 
         const resp = {}
         const questions_resp = []
         const prova = await Test.findOne({where: {nome: nome}})
-        if(!prova) res.send({
+        if(!prova) {
+            res.send({
             statusText: "Failed",
             status: 500
-        })
+            })
+            return;
+        }
         const questions = await Question.findAll({where: {fkTestId: prova.dataValues.id}})
-        if(!questions)
-        res.send({
-            statusText: "Failed",
-            status: 500
-        })
+        if(!questions){
+            res.send({
+                statusText: "Failed",
+                status: 500
+            })
+            return;
+        }
         for(const q of questions){
            const alternatives = await Alternatives.findOne({where: {id: q.dataValues.fkAlternatives}}) 
            const que = {}
@@ -123,8 +147,8 @@ module.exports = {
 
     async endTest(req, res) {
         try {
-           const questions = req.body.questions
-           const email = req.body.email 
+           const questions = req.query.questions
+           const email = req.query.email 
            const resp = []
            const user = await User.findOne({ where: { email: email }});
            for(q of questions){

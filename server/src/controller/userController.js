@@ -95,11 +95,13 @@ module.exports = {
     try {
       const email = req.query.email;
       const user = await User.findOne({ where: { email: email } });
-      if (!user)
+      if (!user){
         res.send({
           data: { message: 'usuario não encontrado' },
           valid: false,
         });
+        return;
+        }
       await User.destroy(user)  
       res.send({
         data: { message: 'usuario deletado' },
@@ -124,7 +126,7 @@ module.exports = {
         data: user, 
         valid: true,
       });
-      res.send({
+      else res.send({
         statusText: "Failed",
         status: 500
     })

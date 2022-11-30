@@ -16,6 +16,7 @@ module.exports = {
             statusText: "Suceso",
             data: turma.dataValues.nome
         });
+        else
         res.send({
             statusText: "Failed",
             status: 500
@@ -28,22 +29,27 @@ module.exports = {
     }
     }, 
     async addstudent(req, res) {
-        try {
-            
+        try {      
         const email =req.query.email; 
         const idClass = req.query.idClass; 
         const user = await User.findOne({ where: { email: email } });
+        if(!user){
         res.send({
             status: 400,
             data: { message: email },
             statusText: 'email nao encontrado'
           });
+          return;
+        }
         const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id}});
-        if (fcs && idClass == user.dataValues.fkTurma) res.send({
+        if (fcs && idClass == user.dataValues.fkTurma){
+             res.send({
             status: 401,
             data: {message: email}, 
             statusText: 'aluno já esta na turma'
-        });
+        })
+        return;
+        }
         const cs = await CS.create({fkTurma: idClass, fkUser: user.dataValues.id});
         res.send({ 
             statusText: 'aluno inserido com sucesso', 
@@ -61,17 +67,23 @@ module.exports = {
             const email =req.query.email; 
             const idClass = req.query.idClass; 
             const user = await User.findOne({ where: { email: email } });
+            if(!user){
             res.send({
                 status: 400,
                 data: { message: email },
                 statusText: 'email nao encontrado'
               });
+              return;
+            }
             const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id}});
-            if (!fcs) res.send({
-                status: 401,
-                data: {message: email}, 
-                statusText: 'aluno não está na turma'
-            });
+            if (!fcs){
+                    res.send({
+                    status: 401,
+                    data: {message: email}, 
+                    statusText: 'aluno não está na turma'
+                });
+                return; 
+            }
            await CS.destroy(fcs);
             res.send({ 
                 statusText: 'aluno retirado da turma com sucesso', 
@@ -106,24 +118,27 @@ module.exports = {
     }, 
     async listaDoProfessor(req, res) {
         try {
-            console.log('omeco')
             const email  = req.query.email;
-            console.log(email)
             const user = await User.findOne({where:{email: email}});
             const resp = [];
-            if(!user)
+            if(!user){
             res.send({
                 status: 400,
                 data: { message: email },
                 statusText: 'email nao encontrado'
               });
+              return;
+            }
             const classes = await Class.findAll({ where: {fkProfessorResponsavel: user.dataValues.id}});
-            if (!classes) res.send({
+            if (!classes) {
+                res.send({
                 status: 401,
                 data: {message: email}, 
                 statusText: 'professor sem turma cadastrada'
             });
-            for(const c of classes) resp.push(c.dataValues);
+            return;
+        }
+            for(const c of classes) resp.push(c.dataValues.nome);
             res.send({
                 statusText: 'Sucesso', 
                 data: resp
