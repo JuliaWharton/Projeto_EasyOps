@@ -75,7 +75,7 @@ module.exports = {
               });
               return;
             }
-            const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id}});
+            const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id, fkTurma: idClass}});
             if (!fcs){
                     res.send({
                     status: 401,
