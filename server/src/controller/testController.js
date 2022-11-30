@@ -87,7 +87,7 @@ module.exports = {
                 return;
             }
                 for(const p of provas)
-                    if(p.dataValues.dataComeco < new Date()) resp.push(p.dataValues.nome) 
+                    if(p.dataValues.dataComeco < new Date()) resp.push(p.dataValues) 
             }
             res.send({
                 statusText: 'Sucesso', 
@@ -102,10 +102,10 @@ module.exports = {
     }, 
     async loadTest(req, res) {
         try {
-        const nome = req.query.nome 
+        const provaId = req.query.id 
         const resp = {}
         const questions_resp = []
-        const prova = await Test.findOne({where: {nome: nome}})
+        const prova = await Test.findOne({where: {id: provaId}})
         if(!prova) {
             res.send({
             statusText: "Failed",
