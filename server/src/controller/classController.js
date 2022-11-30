@@ -126,7 +126,7 @@ module.exports = {
             });
             return;
         }
-            for(const c of classes) resp.push(c.dataValues.nome);
+            for(const c of classes) resp.push(c.dataValues);
             res.send({
                 statusText: 'Sucesso', 
                 data: resp
