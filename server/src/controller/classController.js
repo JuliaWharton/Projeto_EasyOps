@@ -130,7 +130,7 @@ module.exports = {
         }
         catch(erro) {
             res.send({
-                statusText: "Failed",
+                statusText: erro,
                 status: 500
             })
         }
