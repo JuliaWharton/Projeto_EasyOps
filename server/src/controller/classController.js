@@ -38,13 +38,13 @@ module.exports = {
             data: { message: email },
             statusText: 'email nao encontrado'
           });
-        const fcs = CS.findOne({ where: {fkUser: user.dataValues.id}})
+        const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id}})
         if (fcs && idClass == user.dataValues.fkTurma) res.send({
             status: 401,
             data: {message: email}, 
             statusText: 'aluno já esta na turma'
         })
-        const cs = CS.create({fkTurma: idClass, fkUser: user.dataValues.id})
+        const cs = await CS.create({fkTurma: idClass, fkUser: user.dataValues.id})
         res.send({ 
             statusText: 'aluno inserido com sucesso', 
         })
@@ -66,13 +66,13 @@ module.exports = {
                 data: { message: email },
                 statusText: 'email nao encontrado'
               });
-            const fcs = CS.findOne({ where: {fkUser: user.dataValues.id}})
+            const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id}})
             if (!fcs) res.send({
                 status: 401,
                 data: {message: email}, 
                 statusText: 'aluno não está na turma'
             })
-           fcs.destroy()
+           await CS.destroy(fcs)
             res.send({ 
                 statusText: 'aluno retirado da turma com sucesso', 
             })
@@ -87,9 +87,9 @@ module.exports = {
         try {
             const idTurma = req.body.idTurma;
             const resp = [];
-            const users = CS.findAll({where: {fkTurma: idTurma}})
+            const users = await CS.findAll({where: {fkTurma: idTurma}})
             for(const user of users){
-                u = User.findOne({where : {id: user.dataValues.fkUser}});
+                u = await User.findOne({where : {id: user.dataValues.fkUser}});
                 resp.push(u.dataValues)
             }
             res.send({ 
@@ -115,7 +115,7 @@ module.exports = {
                 data: { message: email },
                 statusText: 'email nao encontrado'
               });
-            const classes = Class.findAll({ where: {fkProfessorResponsavel: user.dataValues.id}})
+            const classes = await Class.findAll({ where: {fkProfessorResponsavel: user.dataValues.id}})
             if (!classes) res.send({
                 status: 401,
                 data: {message: email}, 

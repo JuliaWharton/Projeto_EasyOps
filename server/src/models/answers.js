@@ -2,23 +2,18 @@ const db = require('../database/db');
 const {DataTypes} = require('sequelize');
 const Sequelize = require('sequelize')
 
-const User = db.sequelize.define('questoes', {
-    id: {
+const User = db.sequelize.define('respostas', {
+    fkUser: {
         type: db.Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
     },
-    fkTestId: {
-        type: db.Sequelize.INTEGER 
-    },
-    enunciado: {
-        type: db.Sequelize.STRING
-    }, 
-    rightChoice: {
-        type: db.Sequelize.STRING
-    },
-    fkAlternatives: {
+    fkQuestion: {
         type: db.Sequelize.INTEGER
+    },
+    text: {
+        type: db.Sequelize.STRING
+    },
+    correct: {
+        type: db.Sequelize.BOOLEAN
     }
 }
 , {
