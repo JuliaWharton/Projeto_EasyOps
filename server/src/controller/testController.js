@@ -6,7 +6,8 @@ const Question = require('../models/questions')
 const Choices = require('../models/choices')
 const CS = require('../models/class_students');
 const Alternatives = require('../models/choices')
-const Answers = require('../models/answers')
+const Answers = require('../models/answers');
+const { where } = require('sequelize/dist');
 
 
 module.exports = {
@@ -139,11 +140,17 @@ module.exports = {
 
     async endTest(req, res) {
         try {
-           const questions = req.query.questions
+           const test = req.query.test
            const email = req.query.email 
-           const resp = []
+           const resp = {}
+           const questions_resp = []
+           resp.idTest = test.idTest;
+           const testeBd = Test.findOne({where: {id: test.idTest}})
+           resp.name = testeBd.nome
+           let points = 0;
+           const quetions_resp = []
            const user = await User.findOne({ where: { email: email }});
-           for(const q of questions){
+           for(const q of test.questions){
             const question =await  Question.findOne({where: {id: q.id}})
             const ans = await Answers.query({fkUser: user.dataValues.id, fkQuestion: q.id, text: q.answer, correct: q.answer === question.dataValues.rightChoise})
             const alt = await Alternatives.findOne({where: {id: question.dataValues.fkAlternatives}})
@@ -152,8 +159,11 @@ module.exports = {
             feedback.userAnswer = alt.getDataValue(q.answer);
             feedback.correctAnswer = alt.getDataValue(question.dataValues.rightChoise);
             feedback.correct = ans.DataValues.correct;
-            resp.push(feedback)
+            points =  ans.dataValues.correct ? points+1 : points
+            questions_resp.push(feedback)
            }
+           resp.questions = Question
+           resp.points = (points/test.question.length) * 10
            res.send({
             data: email,
             statusText: 'Sucesso'
@@ -162,4 +172,42 @@ module.exports = {
             console.log(error)
         }
     },
+    async listaTestTurma(req, res) {
+        try{
+        const turma = req.query.turma 
+        const resp = []
+        const testes = Test.findAll({where: {fkTurma: turma}})
+        for(const t of testes){
+            resp.push(t.dataValues)
+        }
+        res.send({
+            data: resp,
+            statusText: 'Sucesso'
+        })
+    }
+    catch (error){
+        console.log(error)
+    }
+    },
+    async feedbackProfessor(req, res) {
+        const idProva = req.query.idProva 
+        const resp = {}
+        const questions_resp = []
+        const test = Test.findOne({where: {id: idProva}})
+        resp.name = test.dataValues.name 
+        resp.idProva = test.dataValues.id 
+        const questions = Question.findAll({where: {fkTestId: idProva}})
+        for(const q of questions){
+            let acertos = 0
+            const ans = Answers.findAll({where : {fkQuestion: q.dataValues.id}})
+            for(const a of ans) {
+                acertos =  a.dataValues.correct ? acertos+1 : acertos
+            }
+            const question = {} 
+            question.enunciado = q.dataValues.enunciado
+            question.tentativas = ans.length
+            question.acertos = acertos
+            questions_resp.push(question)
+        }
+    }
 }
