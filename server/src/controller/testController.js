@@ -43,7 +43,7 @@ module.exports = {
             statusText: 'sucesso'
         })
         } catch (error) {
-            console.log(erro)
+            console.log(error)
         }
     }, 
     async listTestsForUser(req, res){
@@ -91,7 +91,7 @@ module.exports = {
                 data: resp
             })
         } catch (error) {
-            console.log(erro)
+            console.log(error)
         }
     }, 
     async loadTest(req, res) {
@@ -132,7 +132,7 @@ module.exports = {
         })
     }
     catch (erro) {
-        console.log(erro)
+        console.log(error)
     }
 }, 
 
@@ -158,7 +158,7 @@ module.exports = {
             statusText: 'Sucesso'
           });
         } catch (error) {
-            console.log(erro)
+            console.log(error)
         }
     },
 }

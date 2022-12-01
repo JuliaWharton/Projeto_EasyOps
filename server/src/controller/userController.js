@@ -85,7 +85,7 @@ module.exports = {
       });
     }
     catch (error) {
-      console.log(erro)
+      console.log(error)
     }
   }, 
   async deleteUser (req,res) {
@@ -106,7 +106,7 @@ module.exports = {
       });
     }
     catch (error) {
-      console.log(erro)
+      console.log(error)
       return
     }
   }, 
@@ -133,8 +133,8 @@ module.exports = {
         status: 500
     })
     }
-    catch(erro) {
-      console.log(erro)
+    catch(error) {
+      console.log(error)
     }
   }
 };

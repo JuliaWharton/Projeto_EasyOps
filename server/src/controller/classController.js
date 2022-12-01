@@ -22,7 +22,7 @@ module.exports = {
             status: 500
         });
         } catch (error) {
-            console.log(erro)
+            console.log(error)
     }
     }, 
     async addstudent(req, res) {
@@ -52,7 +52,7 @@ module.exports = {
             statusText: 'aluno inserido com sucesso', 
         });
         } catch (error) {
-            console.log(erro)
+            console.log(error)
         }
     },
     async removeUser(req, res) {
@@ -83,7 +83,7 @@ module.exports = {
                 statusText: 'aluno retirado da turma com sucesso', 
             });
             } catch (error) {
-                console.log(erro)
+                console.log(error)
             }
     }, 
     async listaAlunos(req,res) {
@@ -101,7 +101,7 @@ module.exports = {
             });
 
         } catch (error) {
-            console.log(erro)
+            console.log(error)
         }
     }, 
     async listaDoProfessor(req, res) {
@@ -133,8 +133,8 @@ module.exports = {
             }
             );
         }
-        catch(erro) {
-            console.log(erro)
+        catch(error) {
+            console.log(error)
         }
     }
 }
