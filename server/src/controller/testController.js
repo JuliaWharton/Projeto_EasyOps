@@ -13,7 +13,7 @@ module.exports = {
     async createTest(req, res){
         try{ 
         const prova = req.query.prova 
-        const test = await Test.create({nome: prova.nome, horarioComeco: prova.comeco, duracao: prova.duracao, descricao: prova.descricao, fkTurma: prova.turma})
+        const test = await Test.create({nome: prova.name, horarioComeco: prova.initialDate, duracao: prova.time, fkTurma: prova.class})
         if(!test) {
             res.send({
                 statusText: "Failed",
@@ -30,7 +30,7 @@ module.exports = {
                 })
                 return
             }
-            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: question.enunciado, rightChoise: question.rightChoise, fkAlternatives: choice })
+            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: question.question, rightChoise: question.correctAnswer, fkAlternatives: choice })
             if(!question){
                 res.send({
                     statusText: "Failed",
