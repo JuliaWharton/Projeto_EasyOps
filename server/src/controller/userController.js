@@ -47,24 +47,13 @@ module.exports = {
     const email = req.query.email;
     const Senha = req.query.senha;
     const confirmacao = req.query.confirmacao;
-    if(confirmacao != Senha){
-      res.send({
-        status: 401,
-        statusText: 'As senhas não batem'
-      })
-      return;
-    }
-
-    usuario = await User.findOne({ where: { email: email } });
     const salt = await bcrypt.genSalt(10);
-    usuario.senha = await bcrypt.hash(Senha, salt)
-    usuario.save();
-      res.send({
-        status: 200,
-        data: { message: email },
-        statusText: 'senha alterada com sucesso!'
-      });
-  
+    const bsenha = await bcrypt.hash(Senha, salt)
+    newSenha = User.update({senha: bsenha}, {where: {email: email}})
+    res.statusMessage = 'Senha Alterado com sucesso';
+    res.status(201).send({
+      data: email
+    });
    },
   
 
