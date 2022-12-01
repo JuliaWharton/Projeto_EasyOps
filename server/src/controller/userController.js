@@ -42,10 +42,9 @@ module.exports = {
   
 
   async mudaSenha(req, res) {
-    const email = req.body[1].email;
-    const Senha = req.body[0].senha;
-    const confirmacao = req.body[0].confirmacao;
-
+    const email = req.query.email;
+    const Senha = req.query.senha;
+    const confirmacao = req.query.confirmacao;
     if(confirmacao != Senha){
       res.send({
         status: 401,
@@ -97,7 +96,7 @@ module.exports = {
         });
         return;
         }
-      await User.destroy(user)  
+      await user.destroy()  
       res.send({
         data: { message: 'usuario deletado' },
         valid: true
@@ -113,13 +112,14 @@ module.exports = {
       const email = req.query.email 
       const nusp = req.query.nusp 
       const cpf = req.query.cpf 
-      const tipo = req.query.tipoAdmin
+      const tipo = req.query.tipo
       const olduser = await User.findOne({where: {email: email }})
       if(olduser){
         res.send({
           data: email,
           statusText: 'Já existe um usuario com este email'
         })
+        return;
       }
       const user = await User.create({email: email, nusp: nusp, senha: nusp, cpf: cpf, tipo: tipo})
       if(user) res.send({
