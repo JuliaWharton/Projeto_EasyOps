@@ -12,7 +12,7 @@ const Answers = require('../models/answers')
 module.exports = {
     async createTest(req, res){
         try{ 
-        const prova = req.query.prova 
+        const prova = req.body.prova 
         const test = await Test.create({nome: prova.name, horarioComeco: prova.initialDate, duracao: prova.time, fkTurma: prova.class})
         if(!test) {
             res.send({
@@ -21,8 +21,8 @@ module.exports = {
             })
             return 
         }
-        for(question of prova.questions){
-            const choice = await Choices.create(question.alternatives) 
+        for(const q of prova.questions){
+            const choice = await Choices.create(q.alternatives) 
             if(!choice) {
                 res.send({
                     statusText: "Failed",
@@ -30,7 +30,7 @@ module.exports = {
                 })
                 return
             }
-            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: question.question, rightChoise: question.correctAnswer, fkAlternatives: choice })
+            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: q.question, rightChoise: q.correctAnswer, fkAlternatives: choice })
             if(!question){
                 res.send({
                     statusText: "Failed",
@@ -142,7 +142,7 @@ module.exports = {
            const email = req.query.email 
            const resp = []
            const user = await User.findOne({ where: { email: email }});
-           for(q of questions){
+           for(const q of questions){
             const question =await  Question.findOne({where: {id: q.id}})
             const ans = await Answers.query({fkUser: user.dataValues.id, fkQuestion: q.id, text: q.answer, correct: q.answer === question.dataValues.rightChoise})
             const alt = await Alternatives.findOne({where: {id: question.dataValues.fkAlternatives}})
