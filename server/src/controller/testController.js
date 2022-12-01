@@ -30,7 +30,7 @@ module.exports = {
                 })
                 return
             }
-            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: q.question, rightChoise: q.correctAnswer, fkAlternatives: choice })
+            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: q.question, rightChoise: q.correctAnswer, fkAlternatives: choice.DataValues.id})
             if(!question){
                 res.send({
                     statusText: "Failed",
