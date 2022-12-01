@@ -31,11 +31,9 @@ module.exports = {
             statusText: 'sucesso'
           });
         } else{
-          res.send({
-            status: 401,
-            data: { message: email },
-            statusText: 'Senha Incorreta'
-          });
+          res.status(201).send({
+            data: email,
+            statusText: 'Senha Incorreta'})
         }
       });
     }
