@@ -46,12 +46,11 @@ module.exports = {
   async mudaSenha(req, res) {
     const email = req.query.email;
     const Senha = req.query.senha;
-    const confirmacao = req.query.confirmacao;
     const salt = await bcrypt.genSalt(10);
     const bsenha = await bcrypt.hash(Senha, salt)
     newSenha = User.update({senha: bsenha}, {where: {email: email}})
-    res.statusMessage = 'Senha Alterado com sucesso';
-    res.status(201).send({
+    res.statusMessage = 'Senha Alterada com sucesso';
+    res.status(200).send({
       data: email
     });
    },
