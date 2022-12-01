@@ -38,8 +38,8 @@ module.exports = {
           });
           return;
         }
-        const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id}});
-        if (fcs && idClass == user.dataValues.fkTurma){
+        const fcs = await CS.findOne({ where: {fkUser: user.dataValues.id, fkTurma: idClass}});
+        if (fcs){
              res.send({
             status: 401,
             data: {message: email}, 

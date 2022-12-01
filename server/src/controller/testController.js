@@ -30,7 +30,7 @@ module.exports = {
                 })
                 return
             }
-            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: q.question, rightChoise: q.correctAnswer, fkAlternatives: choice.DataValues.id})
+            const question = await Question.create({fkTestId: test.dataValues.id, enunciado: q.question, rightChoise: q.correctAnswer, fkAlternatives: choice.dataValues.id})
             if(!question){
                 res.send({
                     statusText: "Failed",
@@ -84,7 +84,8 @@ module.exports = {
                 return;
             }
                 for(const p of provas)
-                    if(p.dataValues.dataComeco < new Date()) resp.push(p.dataValues) 
+                   // if(p.dataValues.dataComeco <= new Date()) 
+                    resp.push(p.dataValues) 
             }
             res.send({
                 statusText: 'Sucesso', 
