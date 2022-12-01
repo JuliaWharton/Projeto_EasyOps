@@ -9,32 +9,31 @@ module.exports = {
     const senha = req.body.senha;
     const user = await User.findOne({ where: { email: email } });
     if (!user){
-      res.send({
-        status: 400,
-        data: { message: email },
-        statusText: 'email não encontrado'
-      });
+      res.statusMessage = 'Usuario nao encontrado';
+            res.status(400).send({
+              data: email
+            });
     }else {
       if(senha == user.dataValues.senha ){
         res.statusMessage = 'Mude sua senha';
             res.status(200).send({
               data: email,
+              tipo: user.dataValues.tipo
             });
         return;
 }else{
       bcrypt.compare(senha, user.dataValues.senha, (error, response) => {
         if (error) res.send(error);
         if (response) {
-          res.send({
-            email: email,
-            tipo: user.dataValues.tipo,
-            data: { message: email },
-            statusText: 'sucesso'
+          res.statusMessage = 'Sucesso';
+          res.status(200).send({
+            data: email,
+            tipo: user.dataValues.tipo
           });
         } else{
           res.statusMessage = 'Senha Incorreta';
             res.status(201).send({
-              data: email,
+              data: email
             });
             return;
         }
