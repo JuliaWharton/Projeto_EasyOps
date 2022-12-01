@@ -16,10 +16,10 @@ module.exports = {
       });
     }else {
       if(senha == user.dataValues.senha ){
-        res.send({
-          tipo: user.dataValues.tipo,
-          statusText: 'Mude sua senha o quanto antes!'
-        });
+        res.statusMessage = 'Mude sua senha';
+            res.status(200).send({
+              data: email,
+            });
         return;
 }else{
       bcrypt.compare(senha, user.dataValues.senha, (error, response) => {
