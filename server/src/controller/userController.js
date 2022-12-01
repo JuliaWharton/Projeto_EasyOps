@@ -20,6 +20,7 @@ module.exports = {
           tipo: user.dataValues.tipo,
           statusText: 'Mude sua senha o quanto antes!'
         });
+        return;
 }else{
       bcrypt.compare(senha, user.dataValues.senha, (error, response) => {
         if (error) res.send(error);
@@ -31,9 +32,11 @@ module.exports = {
             statusText: 'sucesso'
           });
         } else{
-          res.status(201).send({
-            data: email,
-            statusText: 'Senha Incorreta'})
+          res.statusMessage = 'Senha Incorreta';
+            res.status(201).send({
+              data: email,
+            });
+            return;
         }
       });
     }
