@@ -7,7 +7,7 @@ const CS = require('../models/class_students');
 const Alternatives = require('../models/choices')
 const Answers = require('../models/answers');
 const TS = require('../models/testStudent');
-const { where } = require('sequelize/dist');
+
 
 
 
@@ -158,7 +158,6 @@ module.exports = {
            }
            resp.name = testeBd.nome
            let points = 0;
-           const quetions_resp = []
            const user = await User.findOne({ where: { email: email }});
            if(!user){
             res.send({
@@ -168,7 +167,7 @@ module.exports = {
             return; 
            }
            for(const q of questions){
-            const question =await Question.findOne({where: {id: q.id}})
+            const question = await Question.findOne({where: {id: q.id}})
             if(!question){
                 res.send({
                     statusText: "Failed",
