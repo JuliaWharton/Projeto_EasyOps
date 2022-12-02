@@ -168,6 +168,7 @@ module.exports = {
            }
            for(const q of questions){
             console.log(q)
+            console.log(q.id)
             const question = await Question.findOne({where: {id: q.id}})
             if(!question){
                 res.send({
