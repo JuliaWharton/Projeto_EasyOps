@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const db = require('../database/db');
 const User = require('../models/user');
-const Class = require('../models/class')
+const Class = require('../models/class');
 
 module.exports = {
   async login(req, res) {
@@ -48,7 +48,7 @@ module.exports = {
     const Senha = req.query.senha;
     const salt = await bcrypt.genSalt(10);
     const bsenha = await bcrypt.hash(Senha, salt)
-    newSenha = User.update({senha: bsenha}, {where: {email: email}})
+    const newSenha = await User.update({senha: bsenha}, {where: {email: email}})
     res.statusMessage = 'Senha Alterada com sucesso';
     res.status(200).send({
       data: email
@@ -124,5 +124,31 @@ module.exports = {
     catch(error) {
       console.log(error)
     }
+  }, 
+  
+  async listAllStudents(req, res) {
+    try {
+      
+   
+    const users = await User.findAll()
+    const resp = []
+    if(!users) {
+      res.send({
+        statusText: "Sem alunos"
+    })
+    return;
+    }
+    for(const u of users){
+      resp.push(u.dataValues)
+    }
+    res.send({
+      statusText: 'Sucesso',
+      data: resp
+    })
+  } catch (error) {
+      console.log(error)
   }
+  }
+  
+  
 };
