@@ -15,7 +15,7 @@ const User = db.sequelize.define('prova_alunos', {
         type: db.Sequelize.INTEGER
     }, 
     grade: {
-        type: db.Sequelize.INTEGER
+        type: db.Sequelize.FLOAT
     }, 
 }
 , {
