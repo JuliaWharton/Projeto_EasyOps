@@ -7,7 +7,9 @@ const Choices = require('../models/choices')
 const CS = require('../models/class_students');
 const Alternatives = require('../models/choices')
 const Answers = require('../models/answers');
+const TS = require('../models/testStudent');
 const { where } = require('sequelize/dist');
+
 
 
 module.exports = {
@@ -152,7 +154,7 @@ module.exports = {
            const user = await User.findOne({ where: { email: email }});
            for(const q of test.questions){
             const question =await  Question.findOne({where: {id: q.id}})
-            const ans = await Answers.query({fkUser: user.dataValues.id, fkQuestion: q.id, text: q.answer, correct: q.answer === question.dataValues.rightChoise})
+            const ans = await Answers.create({fkUser: user.dataValues.id, fkQuestion: q.id, text: q.answer, correct: q.answer === question.dataValues.rightChoise})
             const alt = await Alternatives.findOne({where: {id: question.dataValues.fkAlternatives}})
             const feedback = {} 
             feedback.enunciado = question.dataValues.enunciado;
@@ -162,6 +164,7 @@ module.exports = {
             points =  ans.dataValues.correct ? points+1 : points
             questions_resp.push(feedback)
            }
+           const ts = TS.create({fkUser: user.dataValues.id, fkTest: test.idTest, grade: (points/test.question.length) * 10}) 
            resp.questions = Question
            resp.points = (points/test.question.length) * 10
            res.send({
@@ -190,24 +193,58 @@ module.exports = {
     }
     },
     async feedbackProfessor(req, res) {
+        try {
         const idProva = req.query.idProva 
         const resp = {}
-        const questions_resp = []
+        const users_resp = []
         const test = Test.findOne({where: {id: idProva}})
         resp.name = test.dataValues.name 
         resp.idProva = test.dataValues.id 
+        const TSs = TS.findAll({where: {fkTest: test.dataValues.id}}) 
+        for (const ts of TSs){
+            const user = User.findOne({where: {id: ts.dataValues.id}})
+            const user_resp = {}
+            user_resp.email = user.dataValues.email
+            user_resp.grade = ts.dataValues.grade 
+            users_resp.push(user_resp)
+        }
+        resp.users_resp = users_resp
+        res.send({
+            data: resp,
+            statusText: 'Sucesso'
+        })
+    } catch (error) {
+            console.log(error)
+    }
+    }, 
+    async feedbackAluno (req, res) {
+        try {
+        const email = req.query.email
+        const idProva = req.query.idProva 
+        const user = User.findOne({where: {email: email}})
+        const ts = TS.findOne({where: {fkTest: idProva, fkUser: user.dataValues.id}})
+        const resp = {}
+        const questions_resp = []
+        resp.email = email
+        resp.grade = ts.grade 
         const questions = Question.findAll({where: {fkTestId: idProva}})
         for(const q of questions){
-            let acertos = 0
-            const ans = Answers.findAll({where : {fkQuestion: q.dataValues.id}})
-            for(const a of ans) {
-                acertos =  a.dataValues.correct ? acertos+1 : acertos
-            }
-            const question = {} 
-            question.enunciado = q.dataValues.enunciado
-            question.tentativas = ans.length
-            question.acertos = acertos
-            questions_resp.push(question)
+            const ans = Answers.findOne({where: {fkUser: user.dataValues.id, fkQuestion: q.dataValues.id}})
+            const alt = await Alternatives.findOne({where: {id: q.dataValues.fkAlternatives}})
+            const feedback = {} 
+            feedback.enunciado = question.dataValues.enunciado;
+            feedback.userAnswer = alt.getDataValue(q.answer);
+            feedback.correctAnswer = alt.getDataValue(question.dataValues.rightChoise);
+            feedback.correct = ans.DataValues.correct;
+            questions_resp.push(feedback)
+           }
+           resp.questions_resp = questions_resp
+           res.send({
+            data: resp,
+            statusText: 'Sucesso'
+        })
+        } catch (error) {
+            console.log(error)
         }
     }
 }

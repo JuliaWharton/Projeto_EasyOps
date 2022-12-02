@@ -92,7 +92,7 @@ module.exports = {
             const resp = [];
             const users = await CS.findAll({where: {fkTurma: idTurma}});
             for(const user of users){
-                u = await User.findOne({where : {id: user.dataValues.fkUser}});
+               const u = await User.findOne({where : {id: user.dataValues.fkUser}});
                 resp.push(u.dataValues);
             }
             res.send({ 
