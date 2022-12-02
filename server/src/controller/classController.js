@@ -57,7 +57,6 @@ module.exports = {
     },
     async removeUser(req, res) {
         try {
-            
             const email =req.query.email; 
             const idClass = req.query.idClass; 
             const user = await User.findOne({ where: { email: email } });
@@ -78,7 +77,7 @@ module.exports = {
                 });
                 return; 
             }
-           await CS.destroy(fcs);
+           await fcs.destroy();
             res.send({ 
                 statusText: 'aluno retirado da turma com sucesso', 
             });
