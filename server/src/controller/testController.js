@@ -147,7 +147,7 @@ module.exports = {
            const idTest = req.query.id 
            const resp = {}
            const questions_resp = []
-           resp.idTest = test.idTest;
+           resp.idTest = idTest;
            const testeBd =  await Test.findOne({where: {id: idTest}})
            if(!testeBd){
             res.send({
