@@ -142,12 +142,13 @@ module.exports = {
 
     async endTest(req, res) {
         try {
-           const test = req.query.test
-           const email = req.query.email 
+           const questions = req.query.questions
+           const email = req.query.email
+           const idTest = req.query.id 
            const resp = {}
            const questions_resp = []
            resp.idTest = test.idTest;
-           const testeBd =  await Test.findOne({where: {id: test.idTest}})
+           const testeBd =  await Test.findOne({where: {id: idTest}})
            if(!testeBd){
             res.send({
                 statusText: "Failed",
@@ -166,7 +167,7 @@ module.exports = {
             })
             return; 
            }
-           for(const q of test.questions){
+           for(const q of questions){
             const question =await Question.findOne({where: {id: q.id}})
             if(!question){
                 res.send({
