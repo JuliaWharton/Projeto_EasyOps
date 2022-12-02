@@ -41,8 +41,6 @@ module.exports = {
     }
   }
   },
-  
-
   async mudaSenha(req, res) {
     const email = req.query.email;
     const Senha = req.query.senha;
@@ -105,16 +103,17 @@ module.exports = {
       const tipo = req.query.tipo
       const olduser = await User.findOne({where: {email: email }})
       if(olduser){
-        res.send({
-          data: email,
-          statusText: 'Já existe um usuario com este email'
-        })
+        es.statusMessage = 'Usuario já cadastrado com esse email';
+            res.status(200).send({
+              data: email,
+              tipo: user.dataValues.tipo
+            });
         return;
       }
       const user = await User.create({email: email, nusp: nusp, senha: nusp, cpf: cpf, tipo: tipo})
       if(user) res.send({
+        statusText: 'Usuario cadastrado com sucesso',
         data: user.dataValues.tipo, 
-        valid: true
       });
       else res.send({
         statusText: "Failed",
