@@ -79,7 +79,7 @@ module.exports = {
                 const provas = await Test.findAll({where: {fkTurma: classe.dataValues.id}});
                 if(!provas) continue;
                 for(const p of provas)
-                    if(p.dataValues.dataComeco <= new Date()) 
+                    //if(p.dataValues.dataComeco <= new Date()) 
                     resp.push(p.dataValues) 
             }
             res.send({
