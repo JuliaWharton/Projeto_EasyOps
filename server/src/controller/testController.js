@@ -167,9 +167,8 @@ module.exports = {
             return; 
            }
            for(const q of questions){
-            console.log(q)
-            console.log(q.id)
-            const question = await Question.findOne({where: {id: q.id}})
+            const formattedQuestion = JSON.parse(q);
+            const question = await Question.findOne({where: {id: formattedQuestion.id}})
             if(!question){
                 res.send({
                     statusText: "Failed",
@@ -177,7 +176,8 @@ module.exports = {
                 })
                 return;
             }
-            const ans = await Answers.create({fkUser: user.dataValues.id, fkQuestion: q.id, text: q.answer, correct: q.answer === question.dataValues.rightChoise})
+            const correct = formattedQuestion.answer === question.dataValues.rightChoise
+            const ans = await Answers.create({fkUser: user.dataValues.id, fkQuestion: formattedQuestion.id, text: formattedQuestion.answer, correct: correct})
             const alt = await Alternatives.findOne({where: {id: question.dataValues.fkAlternatives}})
             if(!alt){
                 res.send({
@@ -188,15 +188,16 @@ module.exports = {
             }
             const feedback = {} 
             feedback.enunciado = question.dataValues.enunciado;
-            feedback.userAnswer = alt.getDataValue(q.answer);
+            feedback.userAnswer = alt.getDataValue(formattedQuestion.answer);
             feedback.correctAnswer = alt.getDataValue(question.dataValues.rightChoise);
-            feedback.correct = ans.DataValues.correct;
+            console.log(ans.dataValues.correct)
+            feedback.correct = correct; 
             points =  ans.dataValues.correct ? points+1 : points
             questions_resp.push(feedback)
            }
-           const ts = await TS.create({fkUser: user.dataValues.id, fkTest: test.idTest, grade: (points/test.question.length) * 10}) 
+           const ts = await TS.create({fkUser: user.dataValues.id, fkTest: idTest, grade: (points/questions.length) * 10}) 
            resp.questions = questions_resp
-           resp.points = (points/test.question.length) * 10
+           resp.points = (points/questions.length) * 10
            res.send({
             data: resp,
             statusText: 'Sucesso'
