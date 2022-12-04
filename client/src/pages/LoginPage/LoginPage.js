@@ -27,20 +27,21 @@ const LoginPage = () => {
     });
   };
   const handleLogin = async (e) => {
-    await Axios.post('http://localhost:3001/login', values)
+    await Axios.post('http://localhost:3001/user/login', values)
       .then(function (response) {
         //handle success
         console.log(response);
-        if (response.status == 401 || response.status == 400) {
+        if (response.status !== 200) {
           alert(response.statusText);
         } else {
-          alert(response.data.statusText);
+          alert(response.statusText);
           localStorage.setItem('email', values.email);
-          if (response.admin) window.location.href = '/DashboardProfessor';
+          if (response.data.tipo === 'admin')
+            window.location.href = '/AdminPage';
+          else if (response.data.tipo === 'professor')
+            window.location.href = '/DashboardProfessor';
           else {
-            localStorage.setItem('email', values.email);
             window.location.href = '/Dashboard';
-
           }
         }
       })
@@ -58,81 +59,88 @@ const LoginPage = () => {
 
   return (
     <ThemeProvider theme={theme}>
-       <div style={{
-            backgroundImage: "url(/xa.jpg)",
-            backgroundRepeat: "no-repeat",
-            maxWidth: 'false',
-            backgroundSize: 'cover', backgroundPositionX: "center", backgroundPositionY: "center",
-            backgroundColor: "#48D1CC", top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            position: 'absolute',
-        }}>
-         <div style={{
-                backgroundColor: 'white',
-                marginLeft: '35%',
-                marginTop: '2%',
-                marginRight: '35%',
-                bottom: 50,
-                borderRadius: '10px'
-            }}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+      <div
+        style={{
+          backgroundImage: 'url(/xa.jpg)',
+          backgroundRepeat: 'no-repeat',
+          maxWidth: 'false',
+          backgroundSize: 'cover',
+          backgroundPositionX: 'center',
+          backgroundPositionY: 'center',
+          backgroundColor: '#48D1CC',
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          position: 'absolute',
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: 'white',
+            marginLeft: '35%',
+            marginTop: '2%',
+            marginRight: '35%',
+            bottom: 50,
+            borderRadius: '10px',
           }}
         >
-        
-            <Icon sx={{ backgroundImage: "url(/aa.png)", backgroundSize: 'cover', width: '70px', height: '70px', m: 1}} />
-          
-          <Typography component="h1" variant="h5" >
-            Login
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleLogin}
-            validationSchema={validationsLogin}
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="email"
-              label="Email"
-              id="email"
-              onChange={handleInputChange}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="senha"
-              label="Senha"
-              type="password"
-              id="senha"
-              onChange={handleInputChange}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
             >
-              Login
-            </Button>
-            <Grid item>
+              <Icon
+                sx={{
+                  backgroundImage: 'url(/aa.png)',
+                  backgroundSize: 'cover',
+                  width: '70px',
+                  height: '70px',
+                  m: 1,
+                }}
+              />
 
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-      </div>
+              <Typography component="h1" variant="h5">
+                Login
+              </Typography>
+              <Box sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="email"
+                  label="Email"
+                  id="email"
+                  onChange={handleInputChange}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="senha"
+                  label="Senha"
+                  type="password"
+                  id="senha"
+                  onChange={handleInputChange}
+                />
+                <Button
+                  onClick={handleLogin}
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Login
+                </Button>
+                <Grid item></Grid>
+              </Box>
+            </Box>
+          </Container>
+        </div>
       </div>
     </ThemeProvider>
   );

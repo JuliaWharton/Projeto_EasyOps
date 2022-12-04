@@ -1,5 +1,4 @@
-import { Redirect } from 'react-router';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, ...props }) => {
   return (
