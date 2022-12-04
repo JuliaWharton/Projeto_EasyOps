@@ -287,7 +287,7 @@ module.exports = {
         return;
       }
       for (const ts of TSs) {
-        const user = await User.findOne({ where: { id: ts.dataValues.id } });
+        const user = await User.findOne({ where: { id: ts.dataValues.fkUser } });
         if (!user) {
           res.send({
             statusText: 'Failed',
