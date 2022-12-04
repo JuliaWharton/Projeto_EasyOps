@@ -93,6 +93,7 @@ module.exports = {
             const ts = TS.findOne({where: {fkTest: p.dataValues.id, fkUser: user.dataValues.id}})
             const provaResp = p.dataValues
             if(ts) {
+                console.log(ts)
             console.log(ts.dataValues.fkUser == user.dataValues.id)
             console.log(ts.dataValues.fkTest == p.dataValues.id)
             provaResp.done = ts.dataValues.fkUser == user.dataValues.id && ts.dataValues.fkTest == p.dataValues.id 
