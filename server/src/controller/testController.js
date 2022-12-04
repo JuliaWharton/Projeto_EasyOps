@@ -212,9 +212,9 @@ module.exports = {
         const feedback = {};
         feedback.enunciado = question.dataValues.enunciado;
         feedback.userAnswer = alt.getDataValue(formattedQuestion.answer);
-        feedback.correctAnswer = alt.getDataValue(question.dataValues.rightChoise);
+        feedback.correctAnswer = alt.getDataValue(question.dataValues.rightChoice);
         console.log(alt.getDataValue(formattedQuestion.answer));
-        console.log(alt.getDataValue(question.dataValues.rightChoise));
+        console.log(alt.getDataValue(question.dataValues.rightChoice));
         feedback.correct = correct;
         points = ans.dataValues.correct ? points + 1 : points;
         questions_resp.push(feedback);
