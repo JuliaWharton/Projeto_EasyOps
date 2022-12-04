@@ -92,7 +92,11 @@ module.exports = {
         for (const p of provas) {
             const ts = TS.findOne({where: {fkTest: p.dataValues.id, fkUser: user.dataValues.id}})
             const provaResp = p.dataValues
-            if(ts && ts.fkUser == user.dataValues.id && ts.fkTest == p.dataValues.id) provaResp.done = true
+            if(ts) {
+            console.log(ts.fkUser == user.dataValues.id)
+            console.log(ts.fkTest == p.dataValues.id)
+            provaResp.done = ts.fkUser == user.dataValues.id && ts.fkTest == p.dataValues.id 
+            }
             else provaResp.done = false 
             resp.push(provaResp)
       }
