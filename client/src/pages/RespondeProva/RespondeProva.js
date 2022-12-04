@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import {
   Box,
@@ -13,59 +13,68 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Countdown from 'react-countdown';
 import themeDefault from '../../theme';
 import Question from '../../components/Question/Question';
+import { useRouter } from '../../hooks/useRouter';
 
 const theme = createTheme(themeDefault);
 
-const initialValues = { 1: '' };
-
-const MOCK_QUESTIONS = {
+const initialValues = {};
+const initialTest = {
+  idTest: 0,
   time: 30,
-  idAluno: 0,
-  idProva: 0,
-  questions: [
-    {
-      question:
-        'A retomada da Antiguidade clássica pela perspectiva do patrimônio cultural foi realizada com o objetivo de:',
-      closedQuestion: true,
-      alternatives: {
-        a: 'afirmar o ideário cristão para reconquistar a grandeza perdida.',
-        b: 'utilizar os vestígios restaurados para justificar o regime político.',
-        c: 'difundir os saberes ancestrais para moralizar os costumes sociais.',
-        d: 'refazer o urbanismo clássico para favorecer a participação política.',
-        e: 'recompor a organização republicana para fortalecer a administração estatal.',
-      },
-    },
-    {
-      question:
-        'A retomada da Antiguidade clássica pela perspectiva do patrimônio cultural foi realizada com o objetivo de:',
-      closedQuestion: true,
-      alternatives: {
-        a: 'afirmar o ideário cristão para reconquistar a grandeza perdida.',
-        b: 'utilizar os vestígios restaurados para justificar o regime político.',
-        c: 'difundir os saberes ancestrais para moralizar os costumes sociais.',
-      },
-    },
-    {
-      question:
-        '“A Técnica de PCR tem inúmeras aplicações. Na clínica, por exemplo, é utilizado no diagnóstico de doenças infecciosas e na detecção de eventos patológicos raros. Na criminalística, um único fio de cabelo pode identificar o doador.” (O que é PCR? in www.madasa.com.br. Acesso em 17/outubro/2007). Esclareça por que a técnica de PCR (reação em cadeia da polimerase) e a técnica de hibridização, conjugadas, podem ser um método eficaz em medicina preventiva nos casos de detecção de anomalias genéticas.',
-    },
-  ],
+  questions: [],
 };
-const RespondeProva = ({
-  time,
-  idAluno,
-  idProva,
-  questions,
-} = MOCK_QUESTIONS) => {
-  const [answers, setAnswers] = useState(initialValues);
 
-  const handleAnswer = (ev, questionNumber) => {
-    setAnswers({ ...answers, [questionNumber]: ev.target.value });
+const RespondeProva = () => {
+  const [answers, setAnswers] = useState(initialValues);
+  const [test, setTest] = useState(initialTest);
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(async () => {
+    await Axios.get('http://localhost:3001/test/loadTest', {
+      params: { id: router.query.id },
+    })
+      .then((response) => {
+        setTest(response.data.data);
+        window.location.href = '/Dashboard';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const handleAnswer = (ev, questionId) => {
+    const newAnswers = answers;
+    newAnswers[questionId] = ev.target.value;
+    setAnswers(newAnswers);
   };
-  const submitAnswers = () => {};
+  const submitAnswers = async () => {
+    const idAnswers = Object.keys(answers);
+    const formatAnswers = idAnswers.map((idAnswer) => ({
+      id: idAnswer,
+      answer: answers[idAnswer],
+    }));
+    await Axios.get('http://localhost:3001/test/endTest', {
+      params: {
+        questions: formatAnswers,
+        email: localStorage.getItem('email'),
+        id,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert(
+            `Prova entregue com sucesso, sua pontuação é de ${response.data.data.points}`,
+          );
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 
   const rendererTimer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
+      alert('Seu tempo acabou! Suas respostas serão enviadas!');
       submitAnswers();
       return 'Tempo acabou!';
     } else {
@@ -123,7 +132,7 @@ const RespondeProva = ({
           px={3}
         >
           <Countdown
-            date={Date.now() + MOCK_QUESTIONS.time * 1000}
+            date={Date.now() + test.time * 1000}
             renderer={rendererTimer}
           />
         </Box>
@@ -174,15 +183,16 @@ const RespondeProva = ({
                 sx={{ mt: 1 }}
                 width="100%"
               >
-                {MOCK_QUESTIONS.questions.map((question, index) => (
+                {test.questions.map((question, index) => (
                   <Question
                     number={index + 1}
                     {...question}
+                    closedQuestion={true}
                     handleAnswer={handleAnswer}
                   />
                 ))}
                 <Button
-                  type="submit"
+                  onClick={submitAnswers}
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}

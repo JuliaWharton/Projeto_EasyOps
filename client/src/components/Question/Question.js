@@ -10,6 +10,7 @@ import {
 import React from 'react';
 
 const Question = ({
+  id,
   number,
   question,
   closedQuestion,
@@ -17,7 +18,7 @@ const Question = ({
   handleAnswer,
 }) => {
   const setAnswer = (e) => {
-    handleAnswer(e, number);
+    handleAnswer(e, id);
   };
 
   return (
