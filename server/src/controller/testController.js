@@ -328,11 +328,12 @@ module.exports = {
         res.send({
           statusText: 'Aluno nao fez a prova ainda',
         });
+        return;
       }
       const resp = {};
       const questions_resp = [];
       resp.email = email;
-      resp.grade = ts.grade;
+      resp.grade = ts.dataValues.grade;
       const questions = await Question.findAll({
         where: { fkTestId: idProva },
       });
@@ -355,7 +356,7 @@ module.exports = {
           return;
         }
         const alt = await Alternatives.findOne({
-          where: { id: q.dataValues.fkAlternatives },
+          where: { id: q.dataValues.fkAlternatives }
         });
         if (!alt) {
           res.send({
@@ -366,8 +367,8 @@ module.exports = {
         }
         const feedback = {};
         feedback.enunciado = q.dataValues.enunciado;
-        feedback.userAnswer = alt.getDataValue(q.answer);
-        feedback.correctAnswer = alt.getDataValue(q.dataValues.rightChoise);
+        feedback.userAnswer = alt.getDataValue(q.dataValues.answer);
+        feedback.correctAnswer = alt.getDataValue(q.dataValues.rightChoice);
         feedback.correct = ans.dataValues.correct;
         questions_resp.push(feedback);
       }
