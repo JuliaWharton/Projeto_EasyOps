@@ -367,7 +367,7 @@ module.exports = {
         }
         const feedback = {};
         feedback.enunciado = q.dataValues.enunciado;
-        feedback.userAnswer = alt.getDataValue(q.dataValues.text);
+        feedback.userAnswer = alt.getDataValue(ans.dataValues.text);
         feedback.correctAnswer = alt.getDataValue(q.dataValues.rightChoice);
         feedback.correct = ans.dataValues.correct;
         questions_resp.push(feedback);
