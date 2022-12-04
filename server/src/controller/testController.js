@@ -89,7 +89,6 @@ module.exports = {
           where: { fkTurma: classe.dataValues.id },
         });
         if (!provas) continue;
-        //if(p.dataValues.dataComeco <= new Date())
         for (const p of provas) resp.push(p.dataValues);
       }
       res.send({
@@ -191,8 +190,7 @@ module.exports = {
           });
           return;
         }
-        const correct =
-          formattedQuestion.answer === question.dataValues.rightChoise;
+        const correct = formattedQuestion.answer === question.dataValues.rightChoice;
         const ans = await Answers.create({
           fkUser: user.dataValues.id,
           fkQuestion: formattedQuestion.id,
