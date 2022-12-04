@@ -89,8 +89,14 @@ module.exports = {
           where: { fkTurma: classe.dataValues.id },
         });
         if (!provas) continue;
-        for (const p of provas) resp.push(p.dataValues);
+        for (const p of provas) {
+            const ts = TS.findOne({where: {fkTest: p.dataValues.id, fkUser: user.dataValues.id}})
+            const provaResp = p.dataValues
+            if(ts) provaResp.done = true
+            else provaResp.done = false 
+            resp.push(provaResp)
       }
+    }
       res.send({
         statusText: 'Sucesso',
         data: resp,
