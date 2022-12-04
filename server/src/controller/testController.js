@@ -37,7 +37,7 @@ module.exports = {
         const question = await Question.create({
           fkTestId: test.dataValues.id,
           enunciado: q.question,
-          rightChoise: q.correctAnswer,
+          rightChoice: q.correctAnswer,
           fkAlternatives: choice.dataValues.id,
         });
         if (!question) {
@@ -213,8 +213,6 @@ module.exports = {
         feedback.enunciado = question.dataValues.enunciado;
         feedback.userAnswer = alt.getDataValue(formattedQuestion.answer);
         feedback.correctAnswer = alt.getDataValue(question.dataValues.rightChoice);
-        console.log(alt.getDataValue(formattedQuestion.answer));
-        console.log(alt.getDataValue(question.dataValues.rightChoice));
         feedback.correct = correct;
         points = ans.dataValues.correct ? points + 1 : points;
         questions_resp.push(feedback);
