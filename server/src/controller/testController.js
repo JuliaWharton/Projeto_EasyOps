@@ -92,8 +92,8 @@ module.exports = {
         for (const p of provas) {
             const ts = TS.findOne({where: {fkTest: p.dataValues.id, fkUser: user.dataValues.id}})
             const provaResp = p.dataValues
-            if(ts) provaResp.done = true
-            else provaResp.done = false 
+            if(!ts) provaResp.done = false
+            else provaResp.done = true 
             resp.push(provaResp)
       }
     }
@@ -243,7 +243,7 @@ module.exports = {
       const testes = await Test.findAll({ where: { fkTurma: turma } });
       if (!testes) {
         res.send({
-          statusText: 'Sem turmas para retornar',
+          statusText: 'Sem testes para retornar',
         });
         return;
       }
