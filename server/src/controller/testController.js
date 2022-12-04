@@ -90,7 +90,7 @@ module.exports = {
         });
         if (!provas) continue;
         for (const p of provas) {
-            const ts = TS.findOne({where: {fkTest: p.dataValues.id, fkUser: user.dataValues.id}})
+            const ts = await TS.findOne({where: {fkTest: p.dataValues.id, fkUser: user.dataValues.id}})
             const provaResp = p.dataValues
             if(ts) {
                 console.log(ts)
