@@ -9,7 +9,7 @@ module.exports = {
     const senha = req.body.senha;
     if(email === 'admin@email.com' && senha === 'admin123'){
       const salt = await bcrypt.genSalt(10);
-      const bsenha = await bcrypt.hash(Senha, salt)
+      const bsenha = await bcrypt.hash(senha, salt)
       const user = await User.create({email: email, senha: bsenha, tipo: 'admin'},)
       res.statusMessage = 'Sucesso';
       res.status(200).send({

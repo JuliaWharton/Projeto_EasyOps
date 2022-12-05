@@ -24,7 +24,7 @@ Também permite ao aluno realizar as provas de qualquer lugar com acesso a inter
 
 - Crie um banco MySql onde o sistema salvará as informações;
 
-- Altere as informações de acesso no /server/src/config/database.js
+- Altere as informações de acesso ao banco no arquivo /server/src/config/database.js
 
 ## Como executar
 - Rode o back entrando na pasta /server e usando o comando npm run devStart
@@ -37,6 +37,8 @@ Também permite ao aluno realizar as provas de qualquer lugar com acesso a inter
 
 - email: admin@email.com 
 - senha: admin123
+
+A senha de primeiro acesso dos usuarios são seus números USP
 
 
 
