@@ -20,7 +20,7 @@ const theme = createTheme(themeDefault);
 const initialValues = {};
 const initialTest = {
   idTest: 0,
-  time: 30,
+  time: 300,
   questions: [],
 };
 
@@ -37,7 +37,6 @@ const RespondeProva = () => {
     })
       .then((response) => {
         setTest(response.data.data);
-        window.location.href = '/Dashboard';
       })
       .catch((error) => {
         console.log(error);
@@ -67,6 +66,7 @@ const RespondeProva = () => {
           alert(
             `Prova entregue com sucesso, sua pontuação é de ${response.data.data.points}`,
           );
+          window.location.href = '/Dashboard';
         }
       })
       .catch((error) => console.log(error));
