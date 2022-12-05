@@ -15,6 +15,8 @@ import {
   TableBody,
   TableContainer,
   Link,
+  Modal,
+  TextField,
 } from '@mui/material';
 
 const drawerWidth = 240;
@@ -69,7 +71,33 @@ const DashboardProfessor = () => {
   };
 
   const [turmas, setTurmas] = useState([]);
+  const [newTurma, setNewTurma] = useState('');
+  const [openModal, setOpenModal] = useState(false);
   const turmasColumns = ['Nome', 'Descrição'];
+
+  const handleModal = () => {
+    setOpenModal(!openModal);
+  };
+
+  const handleNewTurma = (e) => {
+    setNewTurma({ ...newTurma, [e.target.name]: e.target.value });
+  };
+
+  const addClass = async () => {
+    await Axios.get('http://localhost:3001/class/createClass', {
+      params: { ...newTurma, email: localStorage.getItem('email') },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert('Turma cadastrada com sucesso!');
+          handleModal();
+          window.location.reload(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(async () => {
     await Axios.get('http://localhost:3001/class/listaDoProfessor', {
@@ -143,6 +171,65 @@ const DashboardProfessor = () => {
             <Button variant="contained" fullWidth href="/CadastroProva">
               Nova avaliação
             </Button>
+            <Button variant="contained" fullWidth onClick={handleModal}>
+              Criar turma
+            </Button>
+            <Modal
+              open={openModal}
+              onClose={handleModal}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                bgcolor="#fff"
+                color="white"
+                p={3}
+                position="absolute"
+                top="50%"
+                left="50%"
+                sx={{
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  align="center"
+                  color="red"
+                >
+                  Criar turma
+                </Typography>
+                <Box sx={{ mt: 1 }} width="100%">
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="nome"
+                    label="Nome da Turma"
+                    id="nameTurma"
+                    onChange={handleNewTurma}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="desc"
+                    label="Descrição"
+                    id="desc"
+                    onChange={handleNewTurma}
+                  />
+                  <Button
+                    onClick={addClass}
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    Cadastrar
+                  </Button>
+                </Box>
+              </Box>
+            </Modal>
           </Box>
           <Box
             mt={4}
